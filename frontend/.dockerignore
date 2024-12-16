@@ -1,0 +1,8 @@
+node_modules
+build
+dist
+.gitignore
+README.md
+.idea/
+.vscode
+.DS_Store 
