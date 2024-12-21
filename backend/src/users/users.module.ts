@@ -6,9 +6,10 @@ import { WishesService } from '../wishes/wishes.service';
 import { User } from './entities/user.entity';
 import { WishesModule } from '../wishes/wishes.module';
 import { JwtStrategy } from '../auth/strategies/jwt.strategy';
+import { Wish } from 'src/wishes/entities/wish.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), forwardRef(() => WishesModule)],
+  imports: [TypeOrmModule.forFeature([User, Wish]), forwardRef(() => WishesModule)],
   controllers: [UsersController],
   providers: [UsersService, WishesService, JwtStrategy],
   exports: [UsersService, WishesService],

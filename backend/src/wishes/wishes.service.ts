@@ -24,11 +24,11 @@ export class WishesService {
     const wish = this.wishesRepository.create({ ...createWishDto, owner });
     return await this.wishesRepository.save(wish);
   }
-
+  
   async findAll(): Promise<Wish[]> {
     return await this.wishesRepository.find();
   }
-
+  
   async findUserWishes(userId: number): Promise<Wish[]> {
     return await this.wishesRepository.find({
       where: {
@@ -36,18 +36,18 @@ export class WishesService {
       },
     });
   }
-
+  
   async findOne(id: number): Promise<Wish> {
     return await this.wishesRepository.findOne({
       where: { id },
       relations: ['owner'],
     });
   }
-
+  
   private async findMany(query: FindManyOptions<Wish>): Promise<Wish[]> {
     return await this.wishesRepository.find(query);
   }
-
+  
   findLast() {
     return this.findMany({
       select: responseWishDto,
@@ -56,7 +56,7 @@ export class WishesService {
       take: 40,
     });
   }
-
+  
   findTop() {
     return this.findMany({
       select: responseWishDto,
@@ -65,7 +65,7 @@ export class WishesService {
       take: 20,
     });
   }
-
+  
   async updateOne(id: number, updateWishDto: UpdateWishDto, userId: number) {
     const wish = await this.findOne(id);
     if (!wish) {
@@ -80,7 +80,7 @@ export class WishesService {
     }
     return await this.wishesRepository.save({ ...wish, ...updateWishDto });
   }
-
+  
   async removeOne(id: number, userId: number) {
     const wish = await this.findOne(id);
     if (!wish) {
@@ -91,7 +91,7 @@ export class WishesService {
     }
     return await this.wishesRepository.remove(wish);
   }
-
+  
   async copyOne(wishId: number, userId: number) {
     const owner = await this.UsersService.findById(userId);
     if (!owner) {
@@ -102,10 +102,12 @@ export class WishesService {
       throw new NotFoundException(`Wish with id ${wishId} not found`);
     }
     const isExists = !!(await this.wishesRepository.findOne({
-      where: {owner: {id: owner.id}, name: sourceWish.name},
+      where: { owner: { id: owner.id }, name: sourceWish.name },
     }));
     if (isExists) {
-      throw new ConflictException(`Wish with name ${sourceWish.name} already exists`);
+      throw new ConflictException(
+        `Wish with name ${sourceWish.name} already exists`,
+      );
     }
     const newWish = this.wishesRepository.create({
       ...sourceWish,
