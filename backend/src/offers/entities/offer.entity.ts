@@ -1,4 +1,5 @@
 import {
+  Entity,
   Column,
   CreateDateColumn,
   ManyToOne,
@@ -9,6 +10,7 @@ import { IsBoolean, IsNumber, IsString, Length } from 'class-validator';
 import { Wish } from '../../wishes/entities/wish.entity';
 import { User } from '../../users/entities/user.entity';
 
+@Entity()
 export class Offer {
   @PrimaryGeneratedColumn()
   id: number;

@@ -12,17 +12,20 @@ services:
     ports:
       - '4000:3000'
     depends_on:
-      - postgres
+      - database
     networks:
-      - backend
+      - my_network
+      - internal-network
     
-  postgres:
+  database:
     container_name: 'postgres'
-    image: postgres:latest
+    image: postgres:alpine
     env_file: .env
     restart: always
+    ports:
+      - '5432:5432'
     networks:
-      - backend
+      - internal-network
     volumes:
       - postgres_data_dir:/data/postgres
     
@@ -36,11 +39,14 @@ services:
     ports:
       - '8081:80'
     networks:
-      - frontend
+      - my_network
 
 volumes:
   postgres_data_dir:
 
 networks:
-  backend:
-  frontend:
+  internal-network:
+    driver: bridge
+    internal: true
+  my_network:
+    driver: bridge
